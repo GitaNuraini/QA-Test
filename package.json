@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/GitaNuraini/QA-Test/issues"
   },
-  "homepage": "https://github.com/GitaNuraini/QA-Test#readme"
+  "homepage": "https://github.com/GitaNuraini/QA-Test#readme",
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
 }
