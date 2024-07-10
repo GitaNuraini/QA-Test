@@ -1,24 +1,38 @@
+const { expect } = require('chai');
 const request = require('supertest');
-const app = require('../app');
+const app = require('../server'); // Sesuaikan dengan path ke berkas server Anda
 
 describe('Testing API endpoints', () => {
-    // Test case untuk GET /api/books
-    it('should fetch all books', async () => {
-        const response = await request(app).get('/api/books');
-        expect(response.status).toBe(200);
-        expect(response.body.length).toBe(2); // Sesuaikan dengan jumlah buku yang diharapkan
-    });
+  // Pengujian untuk endpoint GET /api/books
+  it('should fetch all books', (done) => {
+    request(app)
+      .get('/api/books')
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        // Melakukan asersi terhadap respons
+        expect(res.body).to.be.an('array');
+        expect(res.body).to.have.lengthOf(2); // Karena ada dua buku dalam contoh server
+        done();
+      });
+  });
 
-    // Test case untuk POST /api/books
-    it('should create a new book', async () => {
-        const newBook = { title: 'New Book', author: 'New Author' };
-        const response = await request(app)
-            .post('/api/books')
-            .send(newBook);
-        expect(response.status).toBe(201);
-        expect(response.body.title).toBe('New Book');
-        expect(response.body.author).toBe('New Author');
-    });
+  // Pengujian untuk endpoint POST /api/books
+  it('should create a new book', (done) => {
+    const newBook = {
+      title: 'New Book',
+      author: 'New Author'
+    };
 
-    // Tambahan test case untuk endpoint lainnya (PUT, DELETE, dll) sesuai kebutuhan
+    request(app)
+      .post('/api/books')
+      .send(newBook)
+      .expect(201)
+      .end((err, res) => {
+        if (err) return done(err);
+        // Melakukan asersi terhadap respons
+        expect(res.body).to.include(newBook); // Memastikan buku baru telah ditambahkan
+        done();
+      });
+  });
 });
